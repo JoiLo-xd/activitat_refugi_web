@@ -42,6 +42,10 @@ public class Refugi {
         return animals;
     }
     
+    public void putAllAnimals(List<Animal> list){
+        animals = list;
+    }
+    
     
     
     

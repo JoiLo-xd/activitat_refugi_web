@@ -46,14 +46,15 @@ public class RefugiDAO {
                 TipusRefugi tipus = TipusRefugi.valueOf(rs.getString(2));
                 int capacitat = rs.getInt(3);
                 Refugi refugi = new Refugi(nom, tipus, capacitat);
-                
+                refugi.putAllAnimals(getAnimalsByRefugi(nom));
             }
+            return refugis;
         }
         
     }
     
     
-    public List<Animal> getAnimalByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException{
+    public List<Animal> getAnimalsByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException{
         try (Connection c = connect(); Statement st = c.createStatement()){
             ArrayList<Animal> animals = new ArrayList<Animal>();
             ResultSet rs = st.executeQuery("select * from animal where refugi =" + nameRefugi + ";");

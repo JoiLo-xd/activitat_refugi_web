@@ -4,8 +4,16 @@
  */
 package com.wildcare.refugi_wildcare.controller;
 
+import com.wildcare.refugi_wildcare.exception.WildCareException;
+import com.wildcare.refugi_wildcare.model.Refugi;
+import com.wildcare.refugi_wildcare.persistence.RefugiDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +31,28 @@ public class AfegirAnimal extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        try {
+            List<Refugi> refugis = RefugiDAO.getInstance().getRefugis();
+            if (refugis.isEmpty()){
+                throw new WildCareException("No hi han refugis disponibles");
+            }
+            ArrayList<Refugi> refugisWithSpace = new ArrayList<Refugi>();
+            
+            for (Refugi r : refugisWithSpace){
+                if (r.getAnimals().size() == r.getCapacitat()){
+                    throw new WildCareException("No hi han refugis amb llocs per animals");
+                }
+            }
+            
+            request.setAttribute("Refugis", refugisWithSpace);
+            
+                    
+            
+        } catch (SQLException | ClassNotFoundException | WildCareException e) {
+            request.setAttribute("Error",e.getMessage());
+        }
         
-        request.setAttribute("refugis", refugis);
+        
         
             
         
@@ -34,7 +62,7 @@ public class AfegirAnimal extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
