@@ -25,6 +25,26 @@ public class Refugi {
         this.capacitat = capacitat;
         animals = new ArrayList<>(); 
     }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public TipusRefugi getTipus() {
+        return tipus;
+    }
+
+    public int getCapacitat() {
+        return capacitat;
+    }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+    
+    
+    
+    
     
     
     

@@ -4,7 +4,9 @@
  */
 package com.wildcare.refugi_wildcare.controller;
 
+import com.wildcare.refugi_wildcare.enums.TipusRefugi;
 import com.wildcare.refugi_wildcare.exception.WildCareException;
+import com.wildcare.refugi_wildcare.model.Refugi;
 import com.wildcare.refugi_wildcare.persistence.RefugiDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,26 +23,38 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AfegirRefugi", urlPatterns = {"/AfegirRefugi"})
 public class AfegirRefugi extends HttpServlet {
+    
+    
 
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{
-            if (RefugiDAO.getInstance().isRefugi((String) request.getAttribute("nom"))){
+            if (RefugiDAO.getInstance().isRefugi((String) request.getParameter("nom"))){
                 
                 throw new WildCareException("Ja existeix un recinte amb el nom indicat.");
             
             }
+            
             else{
-                
-                
+                Refugi refugi = new Refugi(request.getParameter("nom"),TipusRefugi.valueOf(request.getParameter("tipus")),Integer.parseInt(request.getParameter("capacitat")));               
+                RefugiDAO.getInstance().addRefugi(refugi);
+                request.setAttribute("msg","Refugi registrat correctament." );
             }
         
         
         }catch (SQLException | ClassNotFoundException | WildCareException e){
             request.setAttribute("Error", e.getMessage());
+        }catch (NumberFormatException e){
+            request.setAttribute("Error", "La capacitat ha de ser numerica");
         }
+        
+        request.getRequestDispatcher("/AfegirRefugi.jsp").forward(request, response);
+        
+        
+        
+        
     }
 
     /**

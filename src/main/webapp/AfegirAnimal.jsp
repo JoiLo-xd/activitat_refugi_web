@@ -1,7 +1,7 @@
 <%-- 
-    Document   : AfegirRefugi
-    Created on : 12 oct 2025, 14:10:31
-    Author     : joellopez
+    Document   : AfegirAnimal
+    Created on : 9 nov 2025, 20:18:04
+    Author     : joel-lopez
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,19 +9,34 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Afegir Refugi</title>
+        <title>JSP Page</title>
     </head>
     <body>
-        <h1>Afegir Refugi</h1>
+        <h1>Afegir Animal</h1>
         <form action="AfegirRefugi" method="POST">
             <p>Nom: <input type="text" name="nom" required></p>
             <p>Tipus Animal: 
                 <select name="tipus" required>
-                    <option>MAMIFERS</option>
-                    <option>OCELLS</option>
+                    <option>MAMIFER</option>
+                    <option>OCELL</option>
                 </select>
             </p>
-            <p>Capacitat: <input type="text" name="capacitat" required></p>
+            <p>Any Ingres: <input type="text" name="anyIngress" required></p>
+            <p>Estat de salud:  
+                <select name="estat" required>
+                    <option>MAMIFER</option>
+                    <option>OCELL</option>
+                </select>
+            </p>
+            <p>És bebe? <input type="checkbox" name="bebe"></p>
+            
+            <p>Refugi:  
+                <select name="refugi" required>
+                    <% 
+                    %>
+                </select>
+            </p>
+            
             <p><input type="submit" name="Add" value="Afegir"></p>
 
 
