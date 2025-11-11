@@ -15,7 +15,7 @@
     </head>
     <body>
         <h1>Afegir Animal</h1>
-        <% if (request.getAttribute("Error") == null) {%>
+        <% if (request.getAttribute("BigError") == null) {%>
         <form action="AfegirAnimal" method="POST">
             <p>Nom: <input type="text" name="nom" required></p>
             <p>Tipus Animal: 

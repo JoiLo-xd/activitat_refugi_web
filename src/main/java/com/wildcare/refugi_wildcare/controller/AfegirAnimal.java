@@ -6,6 +6,7 @@ package com.wildcare.refugi_wildcare.controller;
 
 import com.wildcare.refugi_wildcare.enums.EstatSalud;
 import com.wildcare.refugi_wildcare.enums.TipusAnimal;
+import com.wildcare.refugi_wildcare.enums.TipusRefugi;
 import com.wildcare.refugi_wildcare.exception.WildCareException;
 import com.wildcare.refugi_wildcare.model.Animal;
 import com.wildcare.refugi_wildcare.model.Refugi;
@@ -33,10 +34,14 @@ public class AfegirAnimal extends HttpServlet {
     
     /*
     APUNTE RAPIDO:
-    getAttribute() = Esto es cunado queremos obtener datos que ha enviado el cliente a 
+    getParametre() = Esto es cunado queremos obtener datos que ha enviado el cliente a 
     traves de un formulario al servidor y desde el servidor o obtenemos.
     
-    getParame
+    getAttribute() = Cuando el cliente necessita algun valor que hemos puesto desde el servlet
+    
+    
+    
+    
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,17 +68,17 @@ public class AfegirAnimal extends HttpServlet {
             }
                     
             
-        } catch (SQLException | ClassNotFoundException | WildCareException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             request.setAttribute("Error",e.getMessage());
+        }
+        catch (WildCareException e){
+            request.setAttribute("BigError", e.getMessage());
         }
         
         request.getRequestDispatcher("AfegirAnimal.jsp").forward(request, response);
-        
-        
-        
-            
-        
+         
     }
+    
 
     
     @Override
@@ -87,19 +92,27 @@ public class AfegirAnimal extends HttpServlet {
             int anyIngress = Integer.parseInt(request.getParameter("anyIngress"));
             EstatSalud salud = EstatSalud.valueOf(request.getParameter("estat"));
             boolean bebe = request.getAttribute("bebe") != null;
-            String nomRefugi = (String) request.getAttribute("refugi");
+            String nomRefugi = request.getParameter("refugi");
             
-                
+            if ((RefugiDAO.getInstance().getRefugiByName(nomRefugi).getTipus() == TipusRefugi.MAMIFERS && tipus == TipusAnimal.MAMIFER) ||
+                    RefugiDAO.getInstance().getRefugiByName(nomRefugi).getTipus() == TipusRefugi.OCELLS && tipus == TipusAnimal.OCELL){
+                    Animal animal = new Animal(nom,tipus,anyIngress,salud,bebe);
+                    RefugiDAO.getInstance().addAnimal(animal, nomRefugi);
+                    request.setAttribute("msg", "Animal Registrat Correctament");     
+            }else{
+                throw new WildCareException("EL tipus del Animal no concorda amb el tipus del refugi");
+            }
+     
             
-            Animal animal = new Animal(nom,tipus,anyIngress,salud,bebe);
-            RefugiDAO.getInstance().addAnimal(animal, nomRefugi);
             
             
-        }catch (SQLException | ClassNotFoundException e) {
+        }catch (SQLException | ClassNotFoundException | WildCareException e) {
             request.setAttribute("Error",e.getMessage());
         
         
         }
+        
+        doGet(request,response); 
     }
 
     /**
