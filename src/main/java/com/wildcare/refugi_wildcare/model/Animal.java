@@ -28,6 +28,13 @@ public class Animal {
         this.salud = salud;
         this.bebe = bebe;
     }
+    public Animal(String nom, TipusAnimal tipus, int anyIngress, EstatSalud salud, boolean bebe) {
+        this.nom = nom;
+        this.tipus = tipus;
+        this.anyIngress = anyIngress;
+        this.salud = salud;
+        this.bebe = bebe;
+    }
 
     public int getId() {
         return id;

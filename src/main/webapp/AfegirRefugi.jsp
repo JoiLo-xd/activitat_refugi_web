@@ -21,7 +21,7 @@
                     <option>OCELLS</option>
                 </select>
             </p>
-            <p>Capacitat: <input type="text" name="capacitat" required></p>
+            <p>Capacitat: <input type="number" name="capacitat" min="1" required></p>
             <p><input type="submit" name="Add" value="Afegir"></p>
 
 

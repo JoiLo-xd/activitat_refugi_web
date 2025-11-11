@@ -47,6 +47,7 @@ public class RefugiDAO {
                 int capacitat = rs.getInt(3);
                 Refugi refugi = new Refugi(nom, tipus, capacitat);
                 refugi.putAllAnimals(getAnimalsByRefugi(nom));
+                refugis.add(refugi);
             }
             return refugis;
         }
@@ -57,7 +58,7 @@ public class RefugiDAO {
     public List<Animal> getAnimalsByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException{
         try (Connection c = connect(); Statement st = c.createStatement()){
             ArrayList<Animal> animals = new ArrayList<Animal>();
-            ResultSet rs = st.executeQuery("select * from animal where refugi =" + nameRefugi + ";");
+            ResultSet rs = st.executeQuery("select * from animal where refugi='" + nameRefugi + "';");
             while (rs.next()){
                 int id = rs.getInt(1);
                 String nom = rs.getString(2);
@@ -83,6 +84,36 @@ public class RefugiDAO {
         }
         
         
+    }
+    
+    
+    public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException{
+        
+        try (Connection c = connect(); Statement st = c.createStatement()){
+            ResultSet rs = st.executeQuery("select * from refugi where nom='" + nomRefugi + "';");
+            rs.next();
+            String nom = rs.getString(1);
+            TipusRefugi tipus = TipusRefugi.valueOf(rs.getString(2));
+            int max = rs.getInt(3);
+            Refugi r = new Refugi(nom,tipus,max);
+            r.putAllAnimals(getAnimalsByRefugi(nomRefugi));     
+            return r; 
+        }
+        
+        
+    }
+    
+    public void addAnimal(Animal animal, String nomRefugi) throws SQLException, ClassNotFoundException{
+        //insert into animal values(null,"animal,pruebabd","OCELL",2021,"BO",false,"prova1_real")
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into animal values (null,?,?,?,?,?,?);") ){
+            ps.setString(1, animal.getNom());
+            ps.setString(2,animal.getTipus().name());
+            ps.setInt(3, animal.getAnyIngress());
+            ps.setString(4, animal.getSalud().name());
+            ps.setBoolean(5, animal.isBebe());
+            ps.setString(6, nomRefugi);
+            ps.executeUpdate(); 
+        }
     }
     
     

@@ -4,16 +4,19 @@
     Author     : joel-lopez
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.wildcare.refugi_wildcare.model.Refugi"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Afegir Animal</title>
     </head>
     <body>
         <h1>Afegir Animal</h1>
-        <form action="AfegirRefugi" method="POST">
+        <% if (request.getAttribute("Error") == null) {%>
+        <form action="AfegirAnimal" method="POST">
             <p>Nom: <input type="text" name="nom" required></p>
             <p>Tipus Animal: 
                 <select name="tipus" required>
@@ -21,24 +24,30 @@
                     <option>OCELL</option>
                 </select>
             </p>
-            <p>Any Ingres: <input type="text" name="anyIngress" required></p>
+            <p>Any Ingres: <input type="number" min="1944" name="anyIngress" required></p>
             <p>Estat de salud:  
                 <select name="estat" required>
-                    <option>MAMIFER</option>
-                    <option>OCELL</option>
+                    <option>BO</option>
+                    <option>REGULAR</option>
+                    <option>GREU</option>
                 </select>
             </p>
             <p>És bebe? <input type="checkbox" name="bebe"></p>
-            
+
             <p>Refugi:  
                 <select name="refugi" required>
-                    <% 
+                    <%for (Refugi r : (ArrayList<Refugi>) request.getAttribute("Refugis")){
+                        %>
+                        <option><%= r.getNom()%></option>
+                        <%
+                        
+                    }
                     %>
                 </select>
             </p>
-            
-            <p><input type="submit" name="Add" value="Afegir"></p>
 
+            <p><input type="submit" name="Add" value="Afegir"></p>
+                <%}%>
 
         </form>
 
