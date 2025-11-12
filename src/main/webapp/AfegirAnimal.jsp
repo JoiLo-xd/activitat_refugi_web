@@ -36,12 +36,12 @@
 
             <p>Refugi:  
                 <select name="refugi" required>
-                    <%for (Refugi r : (ArrayList<Refugi>) request.getAttribute("Refugis")){
-                        %>
-                        <option><%= r.getNom()%></option>
-                        <%
-                        
-                    }
+                    <%for (Refugi r : (ArrayList<Refugi>) request.getAttribute("Refugis")) {
+                    %>
+                    <option><%= r.getNom()%></option>
+                    <%
+
+                        }
                     %>
                 </select>
             </p>
@@ -50,8 +50,10 @@
                 <%}%>
 
         </form>
-
-        <%if (request.getAttribute("Error") != null) {
+        <%else if (request.getAttribute("BigError") != null) {
+        %><p style="color:red">ERROR: <%=(String) request.getAttribute("BigError")%></p><%
+            }
+        if (request.getAttribute("Error") != null) {
         %>
         <p style="color:red">ERROR: <%=(String) request.getAttribute("Error")%></p>
         <%

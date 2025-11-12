@@ -4,11 +4,13 @@
  */
 package com.wildcare.refugi_wildcare.controller;
 
+import com.wildcare.refugi_wildcare.exception.WildCareException;
 import com.wildcare.refugi_wildcare.model.Refugi;
 import com.wildcare.refugi_wildcare.persistence.RefugiDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,22 +31,36 @@ public class ModificarSalud extends HttpServlet {
             throws ServletException, IOException {
         try{
             List<Refugi> refugis = RefugiDAO.getInstance().getRefugis();
+            
+            if ( refugis.isEmpty()){
+                throw new WildCareException("No hi han refugis"); 
+            }
+            List<Refugi> refugisAmbAnimals = new ArrayList<>();
             for (Refugi r : refugis){
-                if (r.getAnimals().isEmpty()){
+                if (!r.getAnimals().isEmpty()){
+                    refugisAmbAnimals.add(r);
                     
                 }
                 
             }
-        }catch (SQLException | ClassNotFoundException e){
+            request.setAttribute("Refugis", refugisAmbAnimals);
             
+            if (refugisAmbAnimals.isEmpty()){
+                throw new WildCareException("No hi han Refugis amb animals");
+            }
+        }catch (SQLException | ClassNotFoundException |WildCareException e){
+            request.setAttribute("BigError", e.getMessage());
             
         }
+        request.getRequestDispatcher("ModificarSalud.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        System.out.println(request.getParameter("refugi"));
+            
+        
     }
 
 
