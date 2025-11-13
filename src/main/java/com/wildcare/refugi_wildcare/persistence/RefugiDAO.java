@@ -23,25 +23,25 @@ import java.util.List;
  * @author joellopez
  */
 public class RefugiDAO {
-    
+
     private static RefugiDAO inst;
-    
-    private RefugiDAO(){
-    
+
+    private RefugiDAO() {
+
     }
-    
-    public static RefugiDAO getInstance(){
-        if (inst == null){
+
+    public static RefugiDAO getInstance() {
+        if (inst == null) {
             inst = new RefugiDAO();
         }
         return inst;
     }
-    
-    public ArrayList<Refugi> getRefugis() throws SQLException, ClassNotFoundException{
-        try (Connection c = connect(); Statement st = c.createStatement()){
+
+    public ArrayList<Refugi> getRefugis() throws SQLException, ClassNotFoundException {
+        try (Connection c = connect(); Statement st = c.createStatement()) {
             ArrayList<Refugi> refugis = new ArrayList<Refugi>();
             ResultSet rs = st.executeQuery("select * from refugi");
-            while (rs.next()){
+            while (rs.next()) {
                 String nom = rs.getString(1);
                 TipusRefugi tipus = TipusRefugi.valueOf(rs.getString(2));
                 int capacitat = rs.getInt(3);
@@ -51,121 +51,117 @@ public class RefugiDAO {
             }
             return refugis;
         }
-        
+
     }
-    
-    
-    public List<Animal> getAnimalsByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException{
-        try (Connection c = connect(); Statement st = c.createStatement()){
+
+    public void deleteRefugi(String nom) throws SQLException, ClassNotFoundException {
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("delete from refugi where nom=?;")) {
+            ps.setString(1, nom);
+            ps.executeUpdate();
+        }
+    }
+
+    public List<Animal> getAnimalsByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException {
+        try (Connection c = connect(); Statement st = c.createStatement()) {
             ArrayList<Animal> animals = new ArrayList<Animal>();
             ResultSet rs = st.executeQuery("select * from animal where refugi='" + nameRefugi + "';");
-            while (rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt(1);
                 String nom = rs.getString(2);
                 TipusAnimal tipus = TipusAnimal.valueOf(rs.getString(3));
                 int anyIngres = rs.getInt(4);
                 EstatSalud estat = EstatSalud.valueOf(rs.getString(5));
                 boolean bebe = rs.getBoolean(6);
-                animals.add(new Animal(id,nom,tipus,anyIngres,estat,bebe));
+                animals.add(new Animal(id, nom, tipus, anyIngres, estat, bebe));
             }
             return animals;
         }
     }
-    
-    public Animal getAnimal(String idAnimal) throws SQLException, ClassNotFoundException{
-        try (Connection c = connect(); Statement st = c.createStatement()){
+
+    public Animal getAnimal(String idAnimal) throws SQLException, ClassNotFoundException {
+        try (Connection c = connect(); Statement st = c.createStatement()) {
             ResultSet rs = st.executeQuery("select *from animal where idanimal='" + idAnimal + "';");
             rs.next();
             int id = rs.getInt(1);
-               String nom = rs.getString(2);
-                TipusAnimal tipus = TipusAnimal.valueOf(rs.getString(3));
-                int anyIngres = rs.getInt(4);
-                EstatSalud estat = EstatSalud.valueOf(rs.getString(5));
-                boolean bebe = rs.getBoolean(6);
-            return new Animal(id,nom,tipus,anyIngres,estat,bebe);
-           
+            String nom = rs.getString(2);
+            TipusAnimal tipus = TipusAnimal.valueOf(rs.getString(3));
+            int anyIngres = rs.getInt(4);
+            EstatSalud estat = EstatSalud.valueOf(rs.getString(5));
+            boolean bebe = rs.getBoolean(6);
+            return new Animal(id, nom, tipus, anyIngres, estat, bebe);
+
         }
     }
-    
-    public void modifiSaludAnimal(Animal animal) throws SQLException, ClassNotFoundException{
-        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set salut=? where idAnimal=?")){
-            
+
+    public void modifiSaludAnimal(Animal animal) throws SQLException, ClassNotFoundException {
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set salut=? where idAnimal=?")) {
+
             ps.setString(1, animal.getSalud().name());
             ps.setInt(2, animal.getId());
-            ps.executeUpdate(); 
+            ps.executeUpdate();
         }
     }
-    
-    
-        
-    
-    
-    public void addRefugi(Refugi refugi) throws SQLException, ClassNotFoundException{
-        
-        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into refugi values (?,?,?);") ){
+
+    public void addRefugi(Refugi refugi) throws SQLException, ClassNotFoundException {
+
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into refugi values (?,?,?);")) {
             ps.setString(1, refugi.getNom());
             ps.setString(2, refugi.getTipus().name());
             ps.setInt(3, refugi.getCapacitat());
             ps.executeUpdate();
         }
-        
-        
+
     }
-    
-    
-    public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException{
-        
-        try (Connection c = connect(); Statement st = c.createStatement()){
+
+    public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException {
+
+        try (Connection c = connect(); Statement st = c.createStatement()) {
             ResultSet rs = st.executeQuery("select * from refugi where nom='" + nomRefugi + "';");
             rs.next();
             String nom = rs.getString(1);
             TipusRefugi tipus = TipusRefugi.valueOf(rs.getString(2));
             int max = rs.getInt(3);
-            Refugi r = new Refugi(nom,tipus,max);
-            r.putAllAnimals(getAnimalsByRefugi(nomRefugi));     
-            return r; 
+            Refugi r = new Refugi(nom, tipus, max);
+            r.putAllAnimals(getAnimalsByRefugi(nomRefugi));
+            return r;
         }
-        
-        
+
     }
-    
-    public void addAnimal(Animal animal, String nomRefugi) throws SQLException, ClassNotFoundException{
+
+    public void addAnimal(Animal animal, String nomRefugi) throws SQLException, ClassNotFoundException {
         //insert into animal values(null,"animal,pruebabd","OCELL",2021,"BO",false,"prova1_real")
-        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into animal values (null,?,?,?,?,?,?);") ){
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into animal values (null,?,?,?,?,?,?);")) {
             ps.setString(1, animal.getNom());
-            ps.setString(2,animal.getTipus().name());
+            ps.setString(2, animal.getTipus().name());
             ps.setInt(3, animal.getAnyIngress());
             ps.setString(4, animal.getSalud().name());
             ps.setBoolean(5, animal.isBebe());
             ps.setString(6, nomRefugi);
-            ps.executeUpdate(); 
+            ps.executeUpdate();
         }
     }
-    
-    
-    public boolean isRefugi(String valor) throws SQLException, ClassNotFoundException{
+
+    public boolean isRefugi(String valor) throws SQLException, ClassNotFoundException {
         boolean exists = false;
-        try (Connection c = connect(); Statement st = c.createStatement()){
-            
-            ResultSet rs = st.executeQuery("select nom from refugi where nom='" +valor+"';");
+        try (Connection c = connect(); Statement st = c.createStatement()) {
+
+            ResultSet rs = st.executeQuery("select nom from refugi where nom='" + valor + "';");
             exists = rs.next();
             rs.close();
         }
-        return exists; 
-        
+        return exists;
+
     }
-    
-    private Connection connect() throws SQLException,ClassNotFoundException{
+
+    private Connection connect() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/wildcare";
         String user = "user_root";
-        return DriverManager.getConnection(url,user,"Asdqwe123");
+        return DriverManager.getConnection(url, user, "Asdqwe123");
     }
-    
-    
-    private void deconect(Connection c) throws SQLException{
-        c.close(); 
-    }
-    
-}
 
+    private void deconect(Connection c) throws SQLException {
+        c.close();
+    }
+
+}
