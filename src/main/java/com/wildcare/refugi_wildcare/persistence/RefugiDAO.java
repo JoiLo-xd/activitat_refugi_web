@@ -72,6 +72,32 @@ public class RefugiDAO {
         }
     }
     
+    public Animal getAnimal(String idAnimal) throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); Statement st = c.createStatement()){
+            ResultSet rs = st.executeQuery("select *from animal where idanimal='" + idAnimal + "';");
+            rs.next();
+            int id = rs.getInt(1);
+               String nom = rs.getString(2);
+                TipusAnimal tipus = TipusAnimal.valueOf(rs.getString(3));
+                int anyIngres = rs.getInt(4);
+                EstatSalud estat = EstatSalud.valueOf(rs.getString(5));
+                boolean bebe = rs.getBoolean(6);
+            return new Animal(id,nom,tipus,anyIngres,estat,bebe);
+           
+        }
+    }
+    
+    public void modifiSaludAnimal(Animal animal) throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set salut=? where idAnimal=?")){
+            
+            ps.setString(1, animal.getSalud().name());
+            ps.setInt(2, animal.getId());
+            ps.executeUpdate(); 
+        }
+    }
+    
+    
+        
     
     
     public void addRefugi(Refugi refugi) throws SQLException, ClassNotFoundException{

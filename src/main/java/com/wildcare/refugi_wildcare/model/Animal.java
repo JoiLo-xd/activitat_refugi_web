@@ -59,6 +59,10 @@ public class Animal {
     public boolean isBebe() {
         return bebe;
     }
+    
+    public void setSalud(EstatSalud salud){
+        this.salud = salud; 
+    }
 
     
     

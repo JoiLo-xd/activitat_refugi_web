@@ -4,7 +4,9 @@
  */
 package com.wildcare.refugi_wildcare.controller;
 
+import com.wildcare.refugi_wildcare.enums.EstatSalud;
 import com.wildcare.refugi_wildcare.exception.WildCareException;
+import com.wildcare.refugi_wildcare.model.Animal;
 import com.wildcare.refugi_wildcare.model.Refugi;
 import com.wildcare.refugi_wildcare.persistence.RefugiDAO;
 import java.io.IOException;
@@ -58,7 +60,38 @@ public class ModificarSalud extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(request.getParameter("refugi"));
+        try{
+            
+            if (request.getParameter("idAnimal") == null && request.getParameter("estat") == null){
+                 
+
+                List<Animal> animalsList = RefugiDAO.getInstance().getAnimalsByRefugi(request.getParameter("refugi"));
+                request.setAttribute("animals", animalsList);
+                request.setAttribute("refugiChoosed",request.getParameter("refugi") );
+            }else if (request.getParameter("idAnimal") != null){
+                String idAnimal = (String) request.getParameter("idAnimal");
+
+                request.setAttribute("Animal", RefugiDAO.getInstance().getAnimal(idAnimal));
+                request.setAttribute("refugiChoosed", request.getParameter("refugiEnviado"));
+                
+                
+            }
+            else if (request.getParameter("estat") != null){
+                Animal animal = RefugiDAO.getInstance().getAnimal(request.getParameter("AnimalEscollit"));
+                if (animal.getSalud() != EstatSalud.valueOf(request.getParameter("estat"))){
+                    animal.setSalud(EstatSalud.valueOf(request.getParameter("estat")));
+                    RefugiDAO.getInstance().modifiSaludAnimal(animal);
+                    request.setAttribute("FinalMSJ", "Salud Modificada");
+                    System.out.println("He llegado aqui");
+                }else{
+                    throw new WildCareException("No pots posar la mateixa salud que ja tenia abans");
+                }
+                
+            }
+        }catch (SQLException | ClassNotFoundException | WildCareException e){
+            request.setAttribute("BigError",e.getMessage());
+        }
+        request.getRequestDispatcher("ModificarSalud.jsp").forward(request,response); 
             
         
     }

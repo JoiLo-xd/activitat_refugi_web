@@ -31,6 +31,7 @@ public class AfegirRefugi extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{
+            
             if (RefugiDAO.getInstance().isRefugi((String) request.getParameter("nom"))){
                 
                 throw new WildCareException("Ja existeix un recinte amb el nom indicat.");
@@ -46,7 +47,7 @@ public class AfegirRefugi extends HttpServlet {
         
         }catch (SQLException | ClassNotFoundException | WildCareException e){
             request.setAttribute("Error", e.getMessage());
-        }catch (NumberFormatException e){
+        }catch (NumberFormatException e){ //No es dona pero per si decas jeje
             request.setAttribute("Error", "La capacitat ha de ser numerica");
         }
         
