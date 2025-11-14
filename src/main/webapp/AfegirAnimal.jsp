@@ -15,7 +15,7 @@
     </head>
     <body>
         <h1>Afegir Animal</h1>
-        <% if (request.getAttribute("BigError") == null) {%>
+        <% if (request.getAttribute("BigError") == null && request.getAttribute("Error") == null) {%>
         <form action="AfegirAnimal" method="POST">
             <p>Nom: <input type="text" name="nom" required></p>
             <p>Tipus Animal: 
@@ -25,7 +25,7 @@
                 </select>
             </p>
             <p>Any Ingres: <input type="number" min="1944" name="anyIngress" required></p>
-            <p>Estat de salud:  
+            <p>Estat de salut:  
                 <select name="estat" required>
                     <option>BO</option>
                     <option>REGULAR</option>
@@ -47,10 +47,10 @@
             </p>
 
             <p><input type="submit" name="Add" value="Afegir"></p>
-                <%}%>
+                
 
         </form>
-        <%else if (request.getAttribute("BigError") != null) {
+        <%}else if (request.getAttribute("BigError") != null) {
         %><p style="color:red">ERROR: <%=(String) request.getAttribute("BigError")%></p><%
             }
         if (request.getAttribute("Error") != null) {

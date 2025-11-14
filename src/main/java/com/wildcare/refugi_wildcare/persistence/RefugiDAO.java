@@ -9,6 +9,7 @@ import com.wildcare.refugi_wildcare.enums.TipusAnimal;
 import com.wildcare.refugi_wildcare.enums.TipusRefugi;
 import com.wildcare.refugi_wildcare.model.Animal;
 import com.wildcare.refugi_wildcare.model.Refugi;
+import com.wildcare.refugi_wildcare.model.StatsTO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -169,6 +170,41 @@ public class RefugiDAO {
         return exists;
 
     }
+    
+    
+    public ArrayList<StatsTO> getStats() throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); Statement st = c.createStatement()) {
+            ResultSet rs = st.executeQuery("select r.nom, r.capacitat, r.tipus_animal, count(a.idanimal) as \"animals_actuals\" from refugi as r left join animal as a on a.refugi = r.nom GROUP BY r.nom, r.capacitat, r.tipus_animal;");
+            ArrayList<StatsTO> statsAll = new ArrayList<>();
+            while (rs.next()){
+                String nom = rs.getString(1);
+                int capacitat = rs.getInt(2);
+                TipusRefugi tipus = TipusRefugi.valueOf(rs.getString(3));
+                int animalsActuals = rs.getInt(4);
+                int placesDispo = capacitat - animalsActuals; 
+                statsAll.add(new StatsTO(nom, tipus, placesDispo, capacitat, animalsActuals));
+                int bons = getAnimalPerSalud(nom, "BO", c);
+                int regulars = getAnimalPerSalud(nom, "REGULAR", c);
+                int greus = getAnimalPerSalud(nom, "GREU", c);
+                statsAll.getLast().setAnimalsBons(bons);
+                statsAll.getLast().setAnimalsGreus(greus);
+                statsAll.getLast().setAnimalsRegulars(regulars);         
+            }
+            return statsAll;  
+            
+            
+            
+        } 
+    }
+    
+    public int getAnimalPerSalud(String re, String sa, Connection c) throws SQLException, ClassNotFoundException{
+        Statement st = c.createStatement();
+        ResultSet rs = st.executeQuery("select count(*) from animal where refugi='" +re+ "' and salut='" + sa + "';");
+        rs.next();
+        int total = rs.getInt(1);
+        return total;
+    }
+    
 
     private Connection connect() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -176,6 +212,11 @@ public class RefugiDAO {
         String user = "user_root";
         return DriverManager.getConnection(url, user, "Asdqwe123");
     }
+    
+    
+    
+    
+    
 
     private void deconect(Connection c) throws SQLException {
         c.close();

@@ -33,8 +33,9 @@
                             }
                         %>
                     </select>
-                    <input type="submit" value="Esborrar Refugi">
+                    
                 </p>
+                <input type="submit" value="Esborrar Refugi">
                 </from>
                 <%}%>
 
