@@ -24,6 +24,8 @@ import java.util.List;
  * @author joellopez
  */
 public class RefugiDAO {
+    
+    //Clase DAO per la conexio de bases de dades , en modo Singeltone
 
     private static RefugiDAO inst;
 
@@ -37,6 +39,8 @@ public class RefugiDAO {
         }
         return inst;
     }
+    
+    // getRefugis retorna una ArrayList amb tots els refugis que hi han en la base de dades, tambe els animas que te dins 
 
     public ArrayList<Refugi> getRefugis() throws SQLException, ClassNotFoundException {
         try (Connection c = connect(); Statement st = c.createStatement()) {
@@ -55,6 +59,8 @@ public class RefugiDAO {
 
     }
     
+    //Aquest getAnimalsBySalud(salud) Aquest metode retorn una arrayList en la torna el la llista amb tots els animals que siguin de la salud que indiquem al parametre 
+    
     public List<Animal> getAnimalsBySalud(EstatSalud salud) throws SQLException, ClassNotFoundException{
         try (Connection c = connect(); Statement st = c.createStatement()) {
             ArrayList<Animal> animals = new ArrayList<Animal>();
@@ -71,6 +77,8 @@ public class RefugiDAO {
             return animals;
         }
     }
+    
+    //Aquest delteRefugi(nom) elimina el Refugi de la BBDD que entra com a parametre 
 
     public void deleteRefugi(String nom) throws SQLException, ClassNotFoundException {
         try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("delete from refugi where nom=?;")) {
@@ -78,6 +86,8 @@ public class RefugiDAO {
             ps.executeUpdate();
         }
     }
+    
+    // Aquest getAnimalsByRefugi(nameRefugi) Es un metode que agafa els animals del refugi que rep com a parametre, aquest es cridat per un alterre funcio del DAO
 
     public List<Animal> getAnimalsByRefugi(String nameRefugi) throws SQLException, ClassNotFoundException {
         try (Connection c = connect(); Statement st = c.createStatement()) {
@@ -95,6 +105,8 @@ public class RefugiDAO {
             return animals;
         }
     }
+    
+    //Aquest getAnimal(idAnimal) s'obte el animal que rep segons el parametre de la funcio 
 
     public Animal getAnimal(String idAnimal) throws SQLException, ClassNotFoundException {
         try (Connection c = connect(); Statement st = c.createStatement()) {
@@ -110,6 +122,9 @@ public class RefugiDAO {
 
         }
     }
+    
+    
+    //Aquest modifiSaludAnimal modifica la salud del animal segons el parametreqe rep, (EL PARAMETRE YA TE LA SALUD CAMBIADA) 
 
     public void modifiSaludAnimal(Animal animal) throws SQLException, ClassNotFoundException {
         try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set salut=? where idAnimal=?")) {
@@ -119,7 +134,7 @@ public class RefugiDAO {
             ps.executeUpdate();
         }
     }
-
+    //Aquest addRefugi (Refugi) nomes affeixeix el refugi que se li dona a la funcio (parametre)
     public void addRefugi(Refugi refugi) throws SQLException, ClassNotFoundException {
 
         try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into refugi values (?,?,?);")) {
@@ -130,6 +145,8 @@ public class RefugiDAO {
         }
 
     }
+    
+    // Aquest getRefugiByName() rep una string y retorna segons el parametre el refugi que es vol
 
     public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException {
 
@@ -145,6 +162,8 @@ public class RefugiDAO {
         }
 
     }
+    
+    // Aquest AddAnimal 
 
     public void addAnimal(Animal animal, String nomRefugi) throws SQLException, ClassNotFoundException {
         //insert into animal values(null,"animal,pruebabd","OCELL",2021,"BO",false,"prova1_real")
