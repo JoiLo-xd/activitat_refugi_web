@@ -61,7 +61,7 @@
 
 
         <%
-        } else  if (request.getAttribute("Choosed") != null){%>
+        } else  if (request.getAttribute("SmallError") != null){%>
         <p style="color:red">ERROR: <%=(String) request.getAttribute("SmallError")%></p>
 
 

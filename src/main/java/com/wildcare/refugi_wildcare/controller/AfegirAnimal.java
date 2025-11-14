@@ -43,6 +43,8 @@ public class AfegirAnimal extends HttpServlet {
     
     
     */
+    
+    //Este get primer revisa que hi hagin refugis, despres envia tots el refugis que tinguin espai, si no te tambe surt un missatge de error 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -80,7 +82,7 @@ public class AfegirAnimal extends HttpServlet {
     }
     
 
-    
+    // Este Post basicamente añade el Animal en el Refugio indicado
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

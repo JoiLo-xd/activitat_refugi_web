@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 public class Stats extends HttpServlet {
 
     
-
+    //Aquest get el que fa es mirar si hi han refugis, despres envia el reguis, No Hi ha post perque nomes enseña estadistiques, si no hi han refugis envia un missatge de error. 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

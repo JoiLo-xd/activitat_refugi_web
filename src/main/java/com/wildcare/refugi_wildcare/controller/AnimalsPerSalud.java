@@ -31,7 +31,7 @@ public class AnimalsPerSalud extends HttpServlet {
 
     
 
-    
+    // Aquest Get el que fa es primer revisar que hi hagin refugi ,y despres que envia el request
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -49,7 +49,7 @@ public class AnimalsPerSalud extends HttpServlet {
         request.getRequestDispatcher("AnimalsPerSalud.jsp").forward(request, response);
     }
 
-    
+    //Aquest doPOst el que a es primer agafa els refugis, els filtra, tambe envia 2 tipos de errors ja que un es global y un altr es mes normal
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -82,6 +82,7 @@ public class AnimalsPerSalud extends HttpServlet {
             request.setAttribute("BigError", e.getMessage());
         } catch(WildCareException e){
             request.setAttribute("SmallError", e.getMessage());
+            request.setAttribute("Choosed", request.getParameter("estat"));
         }
         
         request.getRequestDispatcher("AnimalsPerSalud.jsp").forward(request, response);

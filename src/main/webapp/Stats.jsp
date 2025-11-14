@@ -27,7 +27,7 @@
                 <td style="font-weight: bold;"> Nom refugi: <%=to.getNomRefugi()%></td>
                 <td>Animals que pot acollit: <%=to.getTipusRefugi()%></td>
                
-                 
+                <!-- Aquesta Ternaria si es positiva ho tira a un altre Ternaria ( ES UNA TERNARIA DOBLE!!!) :) -->
                 <td><%=(to.getPlacesDispo()>0)? ((to.getPlacesDispo() == to.getCapacitat())? "--Actualment no te animals --" : "Places disponibles: " + to.getPlacesDispo()) : "--Refugi PLE --"%></td>
                 
             </tr>

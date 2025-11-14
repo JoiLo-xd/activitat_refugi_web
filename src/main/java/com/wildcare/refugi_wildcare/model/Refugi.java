@@ -42,6 +42,7 @@ public class Refugi {
         return animals;
     }
     
+    //Aquest metode crec que es necessari nomes per facilitat en el DAO, ajuda bastant a icar tots els animal de forma rapida
     public void putAllAnimals(List<Animal> list){
         animals = list;
     }

@@ -163,8 +163,7 @@ public class RefugiDAO {
 
     }
     
-    // Aquest AddAnimal 
-
+    // Aquest AddAnimal, agafa el Animal y le nom del refugi y el posa a la base de dades
     public void addAnimal(Animal animal, String nomRefugi) throws SQLException, ClassNotFoundException {
         //insert into animal values(null,"animal,pruebabd","OCELL",2021,"BO",false,"prova1_real")
         try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("insert into animal values (null,?,?,?,?,?,?);")) {
@@ -177,7 +176,8 @@ public class RefugiDAO {
             ps.executeUpdate();
         }
     }
-
+    
+    //Aquest revisa si el refugi esta en la base de dades si esta retorna true si no false
     public boolean isRefugi(String valor) throws SQLException, ClassNotFoundException {
         boolean exists = false;
         try (Connection c = connect(); Statement st = c.createStatement()) {
@@ -190,7 +190,7 @@ public class RefugiDAO {
 
     }
     
-    
+    //Aquest getStats es la consulta mes dificil, agafa totes les stats que es demanen
     public ArrayList<StatsTO> getStats() throws SQLException, ClassNotFoundException{
         try (Connection c = connect(); Statement st = c.createStatement()) {
             ResultSet rs = st.executeQuery("select r.nom, r.capacitat, r.tipus_animal, count(a.idanimal) as \"animals_actuals\" from refugi as r left join animal as a on a.refugi = r.nom GROUP BY r.nom, r.capacitat, r.tipus_animal;");
@@ -215,7 +215,7 @@ public class RefugiDAO {
             
         } 
     }
-    
+    // getAnimalPerSalud agafa l'animal per la salud, que tingui aquest 
     public int getAnimalPerSalud(String re, String sa, Connection c) throws SQLException, ClassNotFoundException{
         Statement st = c.createStatement();
         ResultSet rs = st.executeQuery("select count(*) from animal where refugi='" +re+ "' and salut='" + sa + "';");

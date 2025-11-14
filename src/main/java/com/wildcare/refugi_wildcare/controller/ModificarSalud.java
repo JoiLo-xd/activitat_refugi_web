@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ModificarSalud", urlPatterns = {"/ModificarSalud"})
 public class ModificarSalud extends HttpServlet {
 
-
+    // Aquest Get basicmanet envia els refugis si hi han sino envia missatge de error, ademes els filtra
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -56,18 +56,20 @@ public class ModificarSalud extends HttpServlet {
         }
         request.getRequestDispatcher("ModificarSalud.jsp").forward(request, response);
     }
-
+    //Auquest Post el que fa es depen del moment de la finestra envia animals, envia el animal especific, y si hi han altres tambe modifica la salud de l'animal
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{
-            
+            //AQUESTS IFs ELSEs SON els mes importants, depen dels valors que reben llavors faran diferents cosas
             if (request.getParameter("idAnimal") == null && request.getParameter("estat") == null){
                  
 
                 List<Animal> animalsList = RefugiDAO.getInstance().getAnimalsByRefugi(request.getParameter("refugi"));
                 request.setAttribute("animals", animalsList);
                 request.setAttribute("refugiChoosed",request.getParameter("refugi") );
+            
+            //Si s'ha enviat la id del animal cambia la intencio del Post
             }else if (request.getParameter("idAnimal") != null){
                 String idAnimal = (String) request.getParameter("idAnimal");
 
@@ -76,6 +78,7 @@ public class ModificarSalud extends HttpServlet {
                 
                 
             }
+            //Finalment si trova el estat del animal qu eenvia llavors ja si que cambia el valor
             else if (request.getParameter("estat") != null){
                 Animal animal = RefugiDAO.getInstance().getAnimal(request.getParameter("AnimalEscollit"));
                 if (animal.getSalud() != EstatSalud.valueOf(request.getParameter("estat"))){

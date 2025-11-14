@@ -26,7 +26,7 @@ public class AfegirRefugi extends HttpServlet {
     
     
 
-    
+    // Nomes aquest Post afeixieix un refugi si no esta.
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "EsborrarRefugi", urlPatterns = {"/EsborrarRefugi"})
 public class EsborrarRefugi extends HttpServlet {
 
-    
+    //En aquest Get el que fa es mirar que hi hagin refugis, despres els filtra, i els envia filtrats
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -56,7 +56,7 @@ public class EsborrarRefugi extends HttpServlet {
         
         
     }
-
+    // El post aquest el que fa es informar de si s'ha borrat el refugi.
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
