@@ -146,6 +146,27 @@ public class RefugiDAO {
 
     }
     
+    public void updateAnimal(Animal animal) throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set nom=?,any_ingres=?,salut=?,bebe=?  where id="+animal.getId() +";")) {
+            ps.setString(1, animal.getNom());
+            ps.setInt(2, animal.getAnyIngress());
+            ps.setString(3, animal.getSalud().name());
+            ps.setBoolean(4, animal.isBebe());
+            
+            ps.executeUpdate();
+        }
+    }
+    
+    
+    public void changeAnimalFromRefugi(Animal animal) throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement("update animal set refugi=?  where id="+animal.getId() +";")) {
+            ps.setString(1, animal.getNom());
+            
+            
+            ps.executeUpdate();
+        }
+    }
+    
     // Aquest getRefugiByName() rep una string y retorna segons el parametre el refugi que es vol
 
     public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException {
