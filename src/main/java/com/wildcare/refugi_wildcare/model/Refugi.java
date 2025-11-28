@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class Refugi {
     
-    String nom;
-    TipusRefugi tipus;
-    int capacitat;
-    List<Animal> animals;
+    private String nom;
+    private TipusRefugi tipus;
+    private int capacitat;
+    private List<Animal> animals;
     
     public Refugi(String nom, TipusRefugi tipus, int capacitat ){
         this.nom = nom;

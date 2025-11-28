@@ -50,7 +50,7 @@
             %><p>ID: <%=a.getId()%> NOM: <%=a.getNom()%> Any:<%=a.getAnyIngress()%> Estat de Salud: <%=a.getSalud().name()%> Bebé: <%=a.isBebe() ? "SI" : "NO"%> </p>
 
         <%
-                    }%><p> ==> Capacitat maxima: <%=refu.getCapacitat()%> Animals <%= refu.getAnimals().size()%> Capacitat Actual: <%=refu.getAnimals().size() - refu.getCapacitat()%></p><%
+                    }%><p> ==> Capacitat maxima: <%=refu.getCapacitat()%> Animals <%= refu.getAnimals().size()%> Capacitat Actual: <%=refu.getCapacitat() - refu.getAnimals().size()%></p><%
 
 
         %><% } else {
