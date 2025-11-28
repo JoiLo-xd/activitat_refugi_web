@@ -167,6 +167,22 @@ public class RefugiDAO {
         }
     }
     
+    public ArrayList<Refugi> getRefugisByTipus(TipusRefugi tipus) throws SQLException, ClassNotFoundException{
+        try (Connection c = connect(); Statement st = c.createStatement()) {
+            ArrayList<Refugi> refugis = new ArrayList<>();
+            ResultSet rs = st.executeQuery("select * from refugi where tipus_animal = '"+ tipus.name() +"';");
+            while (rs.next()) {
+                String nom = rs.getString(1);
+                TipusRefugi tipusR = TipusRefugi.valueOf(rs.getString(2)); //podria ficarlo directament pero meh
+                int capacitat = rs.getInt(3);
+                Refugi refugi = new Refugi(nom, tipusR, capacitat);
+                refugi.putAllAnimals(getAnimalsByRefugi(nom));
+                refugis.add(refugi);
+            }
+            return refugis;
+        }
+    }
+    
     // Aquest getRefugiByName() rep una string y retorna segons el parametre el refugi que es vol
 
     public Refugi getRefugiByName(String nomRefugi) throws SQLException, ClassNotFoundException {

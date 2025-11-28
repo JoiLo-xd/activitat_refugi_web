@@ -25,7 +25,7 @@
         %><p><%=request.getAttribute("FinalMSJ")%></p><%
         } else {
         %>
-        <form method="POST" action="AnimalsPerSalud"
+        <form method="POST" action="AnimalsPerSalud">
               <p>Estat de salut:  
                 <select name="estat" required>
                     <% for (String e : estats) {
